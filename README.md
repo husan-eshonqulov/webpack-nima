@@ -1,6 +1,6 @@
 # Webpack nima?
 
-## 1. Webpack nima uchun kerak
+## Webpack nima uchun kerak
 
 Tassavvur qiling ishxonamiz tomonidan bizga yangi bir loyiha qilish topshirildi. Bu loyihada biz yil boshidan bugunga qadar necha kun o'tganini hisoblashimiz kerak.
 
@@ -186,7 +186,7 @@ Webpackni loyihaga qo'shib bo'lgandan so'ng, `index.html` faylimizdan `momentjs`
 ```js
 // index.js
 
-const moment = require('moment');
+import moment from 'moment';
 
 const start = moment([new Date().getFullYear(), 0, 1]);
 const end = moment(new Date());
@@ -196,11 +196,9 @@ const content = document.querySelector('h1');
 content.textContent = `Yil boshidan bugungacha ${days} kun o'tdi.`;
 ```
 
-Loyihamizni browser'da ochib console'ni tekshirsak bizda `Uncaught ReferenceError: require is not defined` error chiqqanini ko'ramiz. Buning sababi javascript dasturlash tili xavfsizlik jihatidan import - export qobiliyati bilan design qilinmaganida.
+Loyihamizni browser'da ochib console'ni tekshirsak bizda `Uncaught SyntaxError: Cannot use import statement outside a module` error chiqqanini ko'ramiz. Buning sababi javascript dasturlash tili xavfsizlik jihatidan import - export qobiliyati bilan design qilinmaganida.
 
-Xuddi shu `index.js` faylni [**nodejs**](https://nodejs.org/en/) da ishlatganimizda esa console'ga `days` o'zgaruvchisi qiymati chiqqanini ko'ramiz. Nodejs backend dasturlash tili bo'lgani uchun u import - export'ni qo'llab quvvatlaydi.
-
-Frontend'da esa shu qobilyatdan foydalana olish uchun webpack'dan foydalanamiz.
+Javascript'da shu qobilyatdan foydalana olish uchun webpack'ni ishlatamiz.
 
 Loyihamizda webpack'ni ishlatish uchun quyidagi buyruqni teramiz.
 
@@ -244,7 +242,7 @@ Endi biz uni `index.html` fayliga qo'shib qo'yamiz.
 ```js
 // index.js
 
-const moment = require('moment');
+import moment from 'moment';
 
 const start = moment([new Date().getFullYear(), 0, 1]);
 const end = moment(new Date());
@@ -255,3 +253,194 @@ content.textContent = `Yil boshidan bugungacha ${days} kun o'tdi.`;
 ```
 
 Endi browser'ga o'tib console'ni tekshirsak hammasi xuddi 1 - versiyadagidek ishlayotganini ko'ramiz.
+
+## Webpackni konfiguratsiya qilish
+
+Loyihamizda webpack konfiguratsiya uchun `webpack.config.js` faylini yaratib olamiz.
+
+```console
+foo@bar:~/Desktop/webpack-loyiha$ touch webpack.config.js
+```
+
+Webpack uchun sodda konfiguratsiya quyidagicha bo'ladi.
+
+```js
+// webpack.config.js
+
+const path = require('path');
+
+module.exports = {
+  entry: './src/index.js',
+  output: {
+    filename: 'main.js',
+    path: path.resolve(__dirname, 'dist'),
+  },
+};
+```
+
+```
+webpack-loyiha
+|- /dist
+  |- main.js
+|- /node_modules
+|- /src
+  |- index.html
+  |- index.js
+|- package-lock.json
+|- package.json
+|- webpack.config.js
+```
+
+Bu yerda `./src/index.js` qaralayotgan javascript fayl, `main.js` webpack hosil qilgan umumiy yagona fayl, `dist` esa `main.js` fayli joylashishi kerak bo'lgan papka.
+
+Yuqorida sanab o'tilgan fayl va papka nomlarini ixtiyorimizga ko'ra o'zgartirsak ham bo'ladi.
+
+Endi webpack'ni shu config fayl orqali ishlatmoqchi bo'lsak quyidagi buyruqni yozamiz.
+
+```
+foo@bar:~/Desktop/webpack-loyiha$ npx webpack --config webpack.config.js
+```
+
+Browserga o'tib loyihani tekshirib ko'rganimizda config fayl kutilayotgandek ishlashini ko'ramiz.
+
+Har safar webpack'ni ishlatishda shunday uzun buyruqni yozmaslik uchun `package.json` faylida biror script yaratib qo'ysak bo'ladi.
+
+```json
+{
+  "name": "webpack-loyiha",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "webpack --config webpack.config.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "moment": "^2.29.4",
+    "webpack": "^5.74.0",
+    "webpack-cli": "^4.10.0"
+  }
+}
+```
+
+Hozir biz webpack'ni ishlatish uchun loyihamizga `start` script'ini qo'shdik.
+
+Uni test qilish uchun quyidagi buyruqni yozish kerak.
+
+```console
+foo@bar:~/Desktop/webpack-loyiha$ npm start
+```
+
+### Webpack loaders
+
+Keling loyihamizni chiroyliroq qilish uchun unga `style.css` faylini qo'shamiz.
+
+```console
+foo@bar:~/Desktop/webpack-loyiha/src$ touch style.css
+```
+
+```
+webpack-loyiha
+|- /dist
+  |- main.js
+|- /node_modules
+|- /src
+  |- index.html
+  |- index.js
+  |- style.css
+|- package-lock.json
+|- package.json
+|- webpack.config.js
+```
+
+```html
+<!-- index.html -->
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <link rel="stylesheet" href="style.css" />
+    <title>Webpack Loyiha</title>
+  </head>
+  <body>
+    <h1>Hello from html!</h1>
+    <script src="../dist/main.js"></script>
+  </body>
+</html>
+```
+
+```css
+/* style.css */
+
+h1 {
+  margin-top: 40px;
+  text-align: center;
+  font-family: sans-serif;
+  color: #ca6dfc;
+}
+```
+
+Ko'rinib turganidek `index.html` ga `style.css` fayli ulab qo'yildi.
+
+Loyihamizni `npm start` buyrug'i yoramida qayta ishlatamiz va browserda biz yozgan stillar ishlayotganini ko'ramiz.
+
+Endi `style.css` faylini `index.html` faylidan olib, uni `index.js` fayliga import qilib qo'yamiz.
+
+```html
+<head>
+  <title>Webpack Loyiha</title>
+</head>
+```
+
+```js
+// index.js
+
+import './style.css';
+import moment from 'moment';
+
+const start = moment([new Date().getFullYear(), 0, 1]);
+const end = moment(new Date());
+const days = end.diff(start, 'days');
+console.log(days);
+const content = document.querySelector('h1');
+content.textContent = `Yil boshidan bugungacha ${days} kun o'tdi.`;
+```
+
+Loyihani `npm start` buyrug'i yordamida qayta ishlatamiz va terminalda webpack `./style.css` faylini tushuna olmayotganligi haqidagi error'ni ko'ramiz.
+
+Webpack'ka `.css` ko'rinishidagi faylllarni tushunturish uchun [**css**](https://webpack.js.org/loaders/css-loader/) va [**style loader**](https://webpack.js.org/loaders/style-loader/) lardan foydalanamiz.
+
+```console
+foo@bar:~/Desktop/webpack-loyiha$ npm install css-loader style-loader --save-dev
+```
+
+Endi bu loader'larni webpack konfiguratsiya fayliga qo'shib qo'yamiz.
+
+```js
+// webpack.config.js
+
+const path = require('path');
+
+module.exports = {
+  entry: './src/index.js',
+  output: {
+    filename: 'main.js',
+    path: path.resolve(__dirname, 'dist'),
+  },
+  module: {
+    rules: [
+      {
+        test: /\.css$/i,
+        use: ['style-loader', 'css-loader'],
+      },
+    ],
+  },
+};
+```
+
+`use: ['style-loader', 'css-loader']` bu yerda loader'larni to'g'ri tartibda kelishi muhimdir.
+
+`npm start` buyrug'ini yozib, browser'ni tekshirsak hammasi ishlayotganini ko'ramiz.
