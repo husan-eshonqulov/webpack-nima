@@ -376,7 +376,6 @@ webpack-loyiha
 /* style.css */
 
 h1 {
-  margin-top: 40px;
   text-align: center;
   font-family: sans-serif;
   color: #ca6dfc;
@@ -444,3 +443,321 @@ module.exports = {
 > `use: ['style-loader', 'css-loader']` bu yerda loader'larni to'g'ri tartibda kelishi muhimdir.
 
 `npm start` buyrug'ini yozib, browser'ni tekshirsak hammasi yaxshi ishlayotganini ko'ramiz.
+
+Agar `bootstrap` ishlatmoqchi bo'lsak uni loyihaga qo'shib, `index.js` ga import qilib qo'yamiz.
+
+```console
+foo@bar:~/Desktop/webpack-loyiha$ npm install bootstrap
+```
+
+```html
+<!-- index.html -->
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <link rel="stylesheet" href="style.css" />
+    <title>Webpack Loyiha</title>
+  </head>
+  <body>
+    <h1 class="mt-5">Hello from html!</h1>
+    <script src="../dist/main.js"></script>
+  </body>
+</html>
+```
+
+```js
+// index.js
+
+import 'bootstrap/dist/css/bootstrap.css';
+import './style.css';
+import moment from 'moment';
+
+const start = moment([new Date().getFullYear(), 0, 1]);
+const end = moment(new Date());
+const days = end.diff(start, 'days');
+console.log(days);
+const content = document.querySelector('h1');
+content.textContent = `Yil boshidan bugungacha ${days} kun o'tdi.`;
+```
+
+Ko'rinib turganidek `h1` elementiga `mt-5` klasini qo'shdik.
+
+Loyihani `npm start` yordamida yana qayta ishlatamiz.
+
+Endi bootstrap'ni browser'da ishlayotganini ko'rishimiz mumkin.
+
+### Cache Busting va Plugins
+
+Loyihamiz tezligini oshirish maqsadida unga cache qo'shamiz. Shunda har safar foydalanuvchi serverga so'rov jo'natganda birinchi browserdagi cache qaraladi. Agar so'ralayotgan narsa cache'da mavjud bo'lsa so'rovga javob cache'dan qaytariladi. Aks holda so'rov serverga jo'natiladi.
+
+Buning uchun webpack konfiguratsiya faylini quyidagicha o'zgartiramiz.
+
+```js
+// webpack.config.js
+
+const path = require('path');
+
+module.exports = {
+  entry: './src/index.js',
+  output: {
+    filename: 'main.[contenthash].js',
+    path: path.resolve(__dirname, 'dist'),
+  },
+  module: {
+    rules: [
+      {
+        test: /\.css$/,
+        use: ['style-loader', 'css-loader'],
+      },
+    ],
+  },
+};
+```
+
+Yuqorida `filename: 'main.[contenthash].js'` o'zgarishi qilindi.
+
+Endi yana `npm start` orqali loyihani qayta ishlatamiz va `dist` papkasi ichiga qaraymiz.
+
+```console
+foo@bar:~/Desktop/webpack-loyiha$ npm start
+```
+
+```
+webpack-loyiha
+|- /dist
+  |- main.8afc1a3a5aca6dea3226.js
+  |- main.js
+|- /node_modules
+|- /src
+  |- index.html
+  |- index.js
+  |- style.css
+|- package-lock.json
+|- package.json
+|- webpack.config.js
+```
+
+Shunda `dist` papkasida `main.8afc1a3a5aca6dea3226.js` shunga o'xshash fayl hosil bo'ladi.
+
+Endi loyihani yana qayta ishlatamiz.
+
+```console
+foo@bar:~/Desktop/webpack-loyiha$ npm start
+```
+
+Shunda `dist` papkasi ichida hech qanday yangi fayl hosil bo'lmaganini ko'ramiz.
+
+Endi `index.js` faylidagi `console.log(days);` ni olib tashlab loyihani qayta ishlatamiz.
+
+```js
+// index.js
+
+import 'bootstrap/dist/css/bootstrap.css';
+import './style.css';
+import moment from 'moment';
+
+const start = moment([new Date().getFullYear(), 0, 1]);
+const end = moment(new Date());
+const days = end.diff(start, 'days');
+const content = document.querySelector('h1');
+content.textContent = `Yil boshidan bugungacha ${days} kun o'tdi.`;
+```
+
+```console
+foo@bar:~/Desktop/webpack-loyiha$ npm start
+```
+
+Shunda `dist` papkasi ichida yangi `main.6dc4374aa93648374bf3.js` shunga o'xshagan fayl qo'shilganligini ko'ramiz.
+
+Ya'ni qachonki loyihamizdagi biror javascript fayl o'zgarsa webpack qayta ishlamoqda.
+
+Har safar webpack har xil nomdagi javascript fayl yaratganligi uchun uni `index.html` ga hard code qilib ulab bo'lmaydi.
+
+Bu narsani automatik qilish uchun bizga [**Html Webpack Plugin**](https://webpack.js.org/plugins/html-webpack-plugin/) yordan beradi.
+
+Uni loyihamizga qo'shamiz.
+
+```console
+foo@bar:~/Desktop/webpack-loyiha$ npm install html-webpack-plugin --save-dev
+```
+
+Endi `src` papkasida yangi `template.html` degan fayl yaratib olamiz va unga `index.html` dagi asosiy content'larni ko'chiramiz.
+
+```console
+foo@bar:~/Desktop/webpack-loyiha/src$ touch template.html
+```
+
+```html
+<!-- teplate.html -->
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Webpack Loyiha</title>
+  </head>
+  <body>
+    <h1 class="mt-5">Hello from html!</h1>
+  </body>
+</html>
+```
+
+Endi bizga `index.html` va `dist` kerak bo'lmaydi, ularni o'chiramiz.
+
+```
+webpack-loyiha
+|- /node_modules
+|- /src
+  |- index.js
+  |- style.css
+  |- template.html
+|- package-lock.json
+|- package.json
+|- webpack.config.js
+```
+
+Keyin webpack konfiguratsiyasini quyidagicha o'zgartiramiz.
+
+```js
+// webpack.config.js
+
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+const path = require('path');
+
+module.exports = {
+  entry: './src/index.js',
+  output: {
+    filename: 'main.[contenthash].js',
+    path: path.resolve(__dirname, 'dist'),
+  },
+  plugins: [
+    new HtmlWebpackPlugin({
+      template: './src/template.html',
+    }),
+  ],
+  module: {
+    rules: [
+      {
+        test: /\.css$/,
+        use: ['style-loader', 'css-loader'],
+      },
+    ],
+  },
+};
+```
+
+Endi `npm start` orqali loyihani qayta ishlatganimizda `dist` papkasi ichida `main.6dc4374aa93648374bf3.js` shunga o'xshash javascript fayl va `index.html` degan html fayl hosil bo'lganini ko'ramiz.
+
+`index.html` faylini ochib qarasak `main.6dc4374aa93648374bf3.js` fayli automatik tarzda script tegi orqali unga ulab qo'yilganligini ko'ramiz.
+
+Endi shu `index.html` ni browserda ochib qarasak hammasi yaxshi ishlayotganligini ko'ramiz.
+
+### Development va Production
+
+Development va production uchun loyihamizda `webpack.common.js`, `webpack.dev.js` va `webpack.prod.js` fayllarini yaratib olamiz va `webpack.config.js` faylini o'chiramiz.
+
+```console
+foo@bar:~/Desktop/webpack-loyiha$ touch webpack.common.js
+foo@bar:~/Desktop/webpack-loyiha$ touch webpack.dev.js
+foo@bar:~/Desktop/webpack-loyiha$ touch webpack.prod.js
+```
+
+```
+|- /dist
+|- /node_modules
+|- /src
+  |- index.js
+  |- style.css
+  |- template.html
+|- package-lock.json
+|- package.json
+|- webpack.common.js
+|- webpack.dev.js
+|- webpack.prod.js
+```
+
+Endi bu fayllarga quyidagicha o'zgartirish qilamiz.
+
+```js
+// webpack.common.js
+
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+
+module.exports = {
+  entry: './src/index.js',
+  plugins: [
+    new HtmlWebpackPlugin({
+      template: './src/template.html',
+    }),
+  ],
+  module: {
+    rules: [
+      {
+        test: /\.css$/,
+        use: ['style-loader', 'css-loader'],
+      },
+    ],
+  },
+};
+```
+
+```js
+// webpack.dev.js
+
+const path = require('path');
+const common = require('./webpack.common');
+const { merge } = require('webpack-merge');
+
+module.exports = merge(common, {
+  mode: 'development',
+  output: {
+    filename: 'main.js',
+    path: path.resolve(__dirname, 'dist'),
+  },
+});
+```
+
+```js
+// webpack.prod.js
+
+const path = require('path');
+const common = require('./webpack.common');
+const { merge } = require('webpack-merge');
+
+module.exports = merge(common, {
+  mode: 'production',
+  output: {
+    filename: 'main.[contenthash].js',
+    path: path.resolve(__dirname, 'dist'),
+  },
+});
+```
+
+Endi `packge.json` faylimizni `scripts` bo'limini quyidagicha o'zgartiramiz.
+
+```json
+"scripts": {
+    "start": "webpack --config webpack.dev.js",
+    "build": "webpack --config webpack.prod.js"
+  },
+```
+
+Bu yerda `start` script'iga `webpack.dev.js`, `build` script'iga esa `webpack.prod.js` webpack konfiguratsiyasi fayllari ulab qo'yilyapti.
+
+Bundan tashqari `webpack.dev.js` va `webpack.prod.js` fayllarini `webpack.common.js` fayli bilan bog'lashda `merge` funksiyasi ishlatilyapti. Shu funksiyani loyihamizga qo'shish uchun quyidagi buyruqni yozamiz.
+
+```console
+foo@bar:~/Desktop/webpack-loyiha$ npm install webpack-merge --save-dev
+```
+
+Endi `npm start` va `npm run buil` script'lari orqali loyihamizni ishlatsak bo'ladi.
+
+Bunda `npm start` development, `npm run build` esa production uchun ishlatiladi.
+
+```console
+foo@bar:~/Desktop/webpack-loyiha$ npm start
+```
+
+```console
+foo@bar:~/Desktop/webpack-loyiha$ npm run build
+```
