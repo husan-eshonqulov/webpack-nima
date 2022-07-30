@@ -4,7 +4,7 @@
 
 Tassavvur qiling ishxonamiz tomonidan bizga yangi bir loyiha qilish topshirildi. Bu loyihada biz yil boshidan bugunga qadar necha kun o'tganini hisoblashimiz kerak.
 
-Keling kompyuterimizda yangi loyiha yaratib olamiz. Buning uchun terminalda quyidagi kodlarni teramiz.
+Keling kompyuterimizda yangi loyiha yaratib olamiz. Buning uchun terminalda quyidagi buyruqlarni yozamiz.
 
 ```console
 foo@bar:~/Desktop$ mkdir webpack-loyiha
@@ -32,7 +32,7 @@ foo@bar:~/Desktop/webpack-loyiha/src$ touch index.html
 foo@bar:~/Desktop/webpack-loyiha/src$ touch index.js
 ```
 
-Shunda papkamiz quyidagi ko'rishishda bo'ladi.
+Shunda loyihamiz quyidagi ko'rishishda bo'ladi.
 
 ```
 webpack-loyiha
@@ -103,13 +103,13 @@ const days = end.diff(start, 'days');
 console.log(days);
 ```
 
-Bu yerda biz `momentjs` kutubxonasidan foydalanib `begin` o'zgaruvchisiga yilning 1 - sanasini, `end` o'zgaruvchisiga bugungi sanani va `days` o'zgaruvchisiga esa yil boshidan bugunga qadar necha kun o'tganini o'zlashtirib olyapmiz.
+Bu yerda biz `momentjs` kutubxonasidan foydalanib `begin` o'zgaruvchisiga yilning 1 - sanasini, `end` o'zgaruvchisiga bugungi sanani va `days` o'zgaruvchisiga yil boshidan bugunga qadar necha kun o'tganini o'zlashtirib olyapmiz.
 
 Endi browserga o'tib console'ni tekshiramiz.
 
 Shunda console'da `Uncaught ReferenceError: moment is not defined` degan error chiqqanini ko'ramiz. Buning sababi biz loyihamizga momentjs kutubxonasini qo'shdik-u, lekin `index.js` faylimizga uni hali qo'shmadik.
 
-Loyihamizdagi barga javascript fayllarga momentjs'ni qo'shish uchun `index.html` faylimizga quyidagi tegni qo'shib qo'yamiz.
+Loyihamizdagi barga javascript fayllarga momentjs'ni qo'shish uchun `index.html` fayliga quyidagi tegni qo'shib qo'yamiz.
 
 ```html
 <body>
@@ -136,13 +136,13 @@ content.textContent = `Yil boshidan bugungacha ${days} kun o'tdi.`;
 
 Shu bilan loyihamizni 1 - versiyasi tugaydi.
 
-Tassavvur qiling siz kattaroq loyiha ustida ishlayapsiz va bu loyihada o'nlab kutubxonadan foydalanmoqchisiz. Buning uchun siz shu kutubxonalarning asosiy javascript fayllarini `node_modules` papkasi ichidan qidirib topib, ularni `index.html` fayliga ulab qo'yishingiz kerak bo'ladi.
+Tassavvur qiling siz kattaroq loyiha ustida ishlayapsiz va bu loyihada o'nlab kutubxonadan foydalanmoqchisiz. Buning uchun siz shu kutubxonalarning javascript fayllarini `node_modules` papkasi ichidan qidirib topib, ularni `index.html` fayliga ulab qo'yishingiz kerak bo'ladi.
 
 Bundan tashqari ba'zi kutubxonalar boshqa yordamchi kutubxonalardan foydalangan bo'lishi mumkin. Shunda siz `index.html` faylga o'sha yordamchi kutubxonalarni ham qo'shib qo'yishingiz kerak bo'ladi.
 
 Qolaversa har bir `index.html` ga ulangan javascript fayl to'g'ri tartibda joylashgan bo'lishi lomiz. Aks holda ko'plab `ReferenceError` lar vujudga keladi.
 
-Buni tekshirish uchun `index.html` dagi `moment` va `index.js` script teglarini o'rinlarini almashtirib qo'yish kifoya.
+Buni tekshirish uchun `index.html` dagi `momentjs` va `index.js` script teglarini o'rinlarini almashtirib qo'yish kifoya.
 
 ```html
 <body>
@@ -156,7 +156,7 @@ Mana shunday muammolarni hal qilish uchun bizga [**webpack**](https://webpack.js
 
 ## Webpack bilan tanishuv
 
-Loyihamizni 2 - versiyasini webpack yordamida qayta refactor(o'zgartirish) qilib chiqamiz.
+Keling loyihamizni 2 - versiyasini webpack yordamida qayta refactor(o'zgartirish) qilib chiqamiz.
 
 Webpack'ni o'rnatish uchun terminalda quyidagi buyruqlarni yozamiz.
 
@@ -166,7 +166,7 @@ foo@bar:~/Desktop/webpack-loyiha$ npm install webpack webpack-cli --save-dev
 
 Bu yerda `webpack` biz ishlatadigan kutubxona, `webpack-cli` webpack'dan terminal orqali foydalanish uchun kerak bo'ladigan tool(asbob), `--save-dev` esa ular faqat development(dasturchilar) uchun kerakligini bildiruvchi flag(bayroq).
 
-Webpackni loyihaga qo'shib bo'lgandan so'ng, `index.html` faylimizdan `momentjs` ulangan script tegini olib tashlaymiz va uni `index.js` fayliga import qilib qo'yamiz.
+Webpackni loyihaga qo'shib bo'lgandan so'ng, `index.html` faylidan `momentjs` ulangan script tegini olib tashlaymiz va uni `index.js` import qilib qo'yamiz.
 
 ```html
 <!-- index.html -->
@@ -196,11 +196,11 @@ const content = document.querySelector('h1');
 content.textContent = `Yil boshidan bugungacha ${days} kun o'tdi.`;
 ```
 
-Loyihamizni browser'da ochib console'ni tekshirsak bizda `Uncaught SyntaxError: Cannot use import statement outside a module` error chiqqanini ko'ramiz. Buning sababi javascript dasturlash tili xavfsizlik jihatidan import - export qobiliyati bilan design qilinmaganida.
+Loyihamizni browser'da ochib console'ni tekshirsak bizda `Uncaught SyntaxError: Cannot use import statement outside a module` degan error chiqqanini ko'ramiz. Buning sababi javascript dasturlash tili xavfsizlik jihati tomonidan import - export qobiliyati bilan design qilinmagan.
 
 Javascript'da shu qobilyatdan foydalana olish uchun webpack'ni ishlatamiz.
 
-Loyihamizda webpack'ni ishlatish uchun quyidagi buyruqni teramiz.
+Loyihamizda webpack'ni ishlatish uchun quyidagi buyruqni yozamiz.
 
 ```console
 foo@bar:~/Desktop/webpack-loyiha$ npx webpack
@@ -220,7 +220,7 @@ webpack-loyiha
 |- package.json
 ```
 
-Shu `main.js` fayli loyihamizdagi barcha javascript kodlarni o'z ichiga olgan yagona fayl bo'ladi.
+Shu `main.js` fayli loyihamizdagi barcha javascript kodlarni o'z ichiga olgan yagona fayl hisoblanadi.
 
 Endi biz uni `index.html` fayliga qo'shib qo'yamiz.
 
@@ -262,6 +262,19 @@ Loyihamizda webpack konfiguratsiya uchun `webpack.config.js` faylini yaratib ola
 foo@bar:~/Desktop/webpack-loyiha$ touch webpack.config.js
 ```
 
+```
+webpack-loyiha
+|- /dist
+  |- main.js
+|- /node_modules
+|- /src
+  |- index.html
+  |- index.js
+|- package-lock.json
+|- package.json
+|- webpack.config.js
+```
+
 Webpack uchun sodda konfiguratsiya quyidagicha bo'ladi.
 
 ```js
@@ -278,22 +291,9 @@ module.exports = {
 };
 ```
 
-```
-webpack-loyiha
-|- /dist
-  |- main.js
-|- /node_modules
-|- /src
-  |- index.html
-  |- index.js
-|- package-lock.json
-|- package.json
-|- webpack.config.js
-```
+Bu yerda `./src/index.js` qaralayotgan javascript fayl, `main.js` webpack hosil qiladigan umumiy yagona fayl, `dist` esa `main.js` fayli joylashadigan papka.
 
-Bu yerda `./src/index.js` qaralayotgan javascript fayl, `main.js` webpack hosil qilgan umumiy yagona fayl, `dist` esa `main.js` fayli joylashishi kerak bo'lgan papka.
-
-Yuqorida sanab o'tilgan fayl va papka nomlarini ixtiyorimizga ko'ra o'zgartirsak ham bo'ladi.
+Yuqorida sanab o'tilgan fayl va papka nomlarini ixtiyoriy tarzda o'zgartirish mukin.
 
 Endi webpack'ni shu config fayl orqali ishlatmoqchi bo'lsak quyidagi buyruqni yozamiz.
 
@@ -301,7 +301,7 @@ Endi webpack'ni shu config fayl orqali ishlatmoqchi bo'lsak quyidagi buyruqni yo
 foo@bar:~/Desktop/webpack-loyiha$ npx webpack --config webpack.config.js
 ```
 
-Browserga o'tib loyihani tekshirib ko'rganimizda config fayl kutilayotgandek ishlashini ko'ramiz.
+Browserga o'tib loyihani tekshirib ko'rganimizda config fayl kutilayotganidek ishlashini ko'ramiz.
 
 Har safar webpack'ni ishlatishda shunday uzun buyruqni yozmaslik uchun `package.json` faylida biror script yaratib qo'ysak bo'ladi.
 
@@ -328,7 +328,7 @@ Har safar webpack'ni ishlatishda shunday uzun buyruqni yozmaslik uchun `package.
 
 Hozir biz webpack'ni ishlatish uchun loyihamizga `start` script'ini qo'shdik.
 
-Uni test qilish uchun quyidagi buyruqni yozish kerak.
+Uni test qilish uchun quyidagi buyruqni yozamiz.
 
 ```console
 foo@bar:~/Desktop/webpack-loyiha$ npm start
@@ -433,7 +433,7 @@ module.exports = {
   module: {
     rules: [
       {
-        test: /\.css$/i,
+        test: /\.css$/,
         use: ['style-loader', 'css-loader'],
       },
     ],
@@ -441,6 +441,6 @@ module.exports = {
 };
 ```
 
-`use: ['style-loader', 'css-loader']` bu yerda loader'larni to'g'ri tartibda kelishi muhimdir.
+> `use: ['style-loader', 'css-loader']` bu yerda loader'larni to'g'ri tartibda kelishi muhimdir.
 
-`npm start` buyrug'ini yozib, browser'ni tekshirsak hammasi ishlayotganini ko'ramiz.
+`npm start` buyrug'ini yozib, browser'ni tekshirsak hammasi yaxshi ishlayotganini ko'ramiz.
