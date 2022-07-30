@@ -737,9 +737,9 @@ Endi `packge.json` faylimizni `scripts` bo'limini quyidagicha o'zgartiramiz.
 
 ```json
 "scripts": {
-    "start": "webpack --config webpack.dev.js",
-    "build": "webpack --config webpack.prod.js"
-  },
+  "start": "webpack --config webpack.dev.js",
+  "build": "webpack --config webpack.prod.js"
+},
 ```
 
 Bu yerda `start` script'iga `webpack.dev.js`, `build` script'iga esa `webpack.prod.js` webpack konfiguratsiyasi fayllari ulab qo'yilyapti.
@@ -760,4 +760,49 @@ foo@bar:~/Desktop/webpack-loyiha$ npm start
 
 ```console
 foo@bar:~/Desktop/webpack-loyiha$ npm run build
+```
+
+### Webpack DevServer
+
+Shu paytgacha loyihamizda o'zgarishlar bo'lganda `npm start` orqali uni qayta ishlatib keldik. Endi shu narsani bizga automatik qilib beruvchi [**webpack-dev-server**](https://webpack.js.org/configuration/dev-server/) ni loyihamizga o'rnatamiz.
+
+```console
+foo@bar:~/Desktop/webpack-loyiha$ npm install webpack-dev-server --save-dev
+```
+
+Endi uni `start` script'iga qo'shib qo'yamiz.
+
+```json
+"scripts": {
+  "start": "webpack-dev-server --config webpack.dev.js --open",
+  "build": "webpack --config webpack.prod.js"
+},
+```
+
+Bu yerda `--open` flagi(bayrog'i) `npm start` buyrug'i berilganda loyihani browser'da ochib berish uchun ishlatiladi.
+
+Keling buni sinab ko'ramiz.
+
+```console
+foo@bar:~/Desktop/webpack-loyiha$ npm start
+```
+
+Shu buyruqni terganimizda browser'da loyihamiz automatik tarzda ochiladi.
+
+Endi `index.js` fayliga o'zgartirish kiritganimizda loyiha qayta automatik ishga tushishini ko'ramiz.
+
+```js
+// index.js
+
+import 'bootstrap/dist/css/bootstrap.css';
+import './style.css';
+import moment from 'moment';
+
+const start = moment([new Date().getFullYear(), 0, 1]);
+const end = moment(new Date());
+const days = end.diff(start, 'days');
+const content = document.querySelector('h1');
+content.textContent = `Yil boshidan bugungacha ${days} kun o'tdi.`;
+
+console.log('The end');
 ```
