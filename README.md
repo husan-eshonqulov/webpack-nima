@@ -802,3 +802,9 @@ content.textContent = `Yil boshidan bugungacha ${days} kun o'tdi.`;
 
 console.log('The end');
 ```
+
+## Xulosa
+
+- webpack - loyihamizda `import - export` dan foydalana olish uchun tool
+- webpack - loyihadagi barcha bir xil turdagi fayllarni bitta yagona fayl qilib beruvchi tool
+- webpack - loyihamizda ko'plab qulayliklarni yaratib beruvchi tool
