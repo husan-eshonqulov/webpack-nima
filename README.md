@@ -77,8 +77,6 @@ Endi loyihamizga vaqt va sanalar bilan osonroq ishlash uchun [**momentjs**](http
 foo@bar:~/Desktop/webpack-loyiha$ npm install moment
 ```
 
-Shunda loyihamiz ko'rinishi quyidagicha bo'ladi.
-
 ```
 webpack-loyiha
 |- /node_modules
@@ -119,7 +117,7 @@ Loyihamizdagi barga javascript fayllarga momentjs'ni qo'shish uchun `index.html`
 </body>
 ```
 
-Endi browserga o'tib console'ni tekshirsak hammasi kutilgandek ishlayotganini ko'ramiz.
+Endi browserga o'tib console'ni qayta tekshirsak hammasi kutilganidek ishlayotganini ko'ramiz.
 
 Browser'da ham shu `days` o'zgaruvchisi qiymatini chiqarish uchun `index.js` ga quyidagi kodni qo'shamiz.
 
@@ -136,7 +134,7 @@ content.textContent = `Yil boshidan bugungacha ${days} kun o'tdi.`;
 
 Shu bilan loyihamizni 1 - versiyasi tugaydi.
 
-Tassavvur qiling siz kattaroq loyiha ustida ishlayapsiz va bu loyihada o'nlab kutubxonadan foydalanmoqchisiz. Buning uchun siz shu kutubxonalarning javascript fayllarini `node_modules` papkasi ichidan qidirib topib, ularni `index.html` fayliga ulab qo'yishingiz kerak bo'ladi.
+Tassavvur qiling siz kattaroq loyiha ustida ishlayapsiz va bu loyihada o'nlab kutubxonalardan foydalanmoqchisiz. Buning uchun siz shu kutubxonalarning javascript fayllarini `node_modules` papkasi ichidan qidirib topib, ularni `index.html` fayliga ulab qo'yishingiz kerak bo'ladi.
 
 Bundan tashqari ba'zi kutubxonalar boshqa yordamchi kutubxonalardan foydalangan bo'lishi mumkin. Shunda siz `index.html` faylga o'sha yordamchi kutubxonalarni ham qo'shib qo'yishingiz kerak bo'ladi.
 
@@ -152,7 +150,7 @@ Buni tekshirish uchun `index.html` dagi `momentjs` va `index.js` script teglarin
 </body>
 ```
 
-Mana shunday muammolarni hal qilish uchun bizga [**webpack**](https://webpack.js.org/) kerak bo'ladi. Va u bizga yuqorida sanab o'tilgan qadamlarni automatik tarzda qilib beradi.
+Mana shunday muammolarni hal qilish uchun bizga [**webpack**](https://webpack.js.org/) kerak bo'ladi. Va u bizga yuqorida sanab o'tilgan amallarni automatik tarzda bajarib beradi.
 
 ## Webpack bilan tanishuv
 
@@ -198,7 +196,7 @@ content.textContent = `Yil boshidan bugungacha ${days} kun o'tdi.`;
 
 Loyihamizni browser'da ochib console'ni tekshirsak bizda `Uncaught SyntaxError: Cannot use import statement outside a module` degan error chiqqanini ko'ramiz. Buning sababi javascript dasturlash tili xavfsizlik jihati tomonidan import - export qobiliyati bilan design qilinmagan.
 
-Javascript'da shu qobilyatdan foydalana olish uchun webpack'ni ishlatamiz.
+Javascript'da bu qobilyatdan foydalana olish uchun webpack'ni ishlatamiz.
 
 Loyihamizda webpack'ni ishlatish uchun quyidagi buyruqni yozamiz.
 
@@ -222,7 +220,7 @@ webpack-loyiha
 
 Shu `main.js` fayli loyihamizdagi barcha javascript kodlarni o'z ichiga olgan yagona fayl hisoblanadi.
 
-Endi biz uni `index.html` fayliga qo'shib qo'yamiz.
+Endi biz uni `index.html` fayliga ulab qo'yamiz.
 
 ```html
 <!-- index.html -->
@@ -256,7 +254,7 @@ Endi browser'ga o'tib console'ni tekshirsak hammasi xuddi 1 - versiyadagidek ish
 
 ## Webpackni konfiguratsiya qilish
 
-Loyihamizda webpack konfiguratsiya uchun `webpack.config.js` faylini yaratib olamiz.
+Loyihamizda webpack konfiguratsiyasi uchun `webpack.config.js` faylini yaratib olamiz.
 
 ```console
 foo@bar:~/Desktop/webpack-loyiha$ touch webpack.config.js
@@ -293,7 +291,7 @@ module.exports = {
 
 Bu yerda `./src/index.js` qaralayotgan javascript fayl, `main.js` webpack hosil qiladigan umumiy yagona fayl, `dist` esa `main.js` fayli joylashadigan papka.
 
-Yuqorida sanab o'tilgan fayl va papka nomlarini ixtiyoriy tarzda o'zgartirish mukin.
+Yuqorida sanab o'tilgan fayl va papka nomlarini ixtiyoriy tarzda o'zgartirish mumkin.
 
 Endi webpack'ni shu config fayl orqali ishlatmoqchi bo'lsak quyidagi buyruqni yozamiz.
 
@@ -301,11 +299,13 @@ Endi webpack'ni shu config fayl orqali ishlatmoqchi bo'lsak quyidagi buyruqni yo
 foo@bar:~/Desktop/webpack-loyiha$ npx webpack --config webpack.config.js
 ```
 
-Browserga o'tib loyihani tekshirib ko'rganimizda config fayl kutilayotganidek ishlashini ko'ramiz.
+Browser'ga o'tib loyihani tekshirib ko'rganimizda config fayl kutilayotganidek ishlashini ko'ramiz.
 
-Har safar webpack'ni ishlatishda shunday uzun buyruqni yozmaslik uchun `package.json` faylida biror script yaratib qo'ysak bo'ladi.
+Har safar webpack'ni ishlatishda bunday uzun buyruqni yozmaslik uchun `package.json` faylida biror script yaratib qo'ysak bo'ladi.
 
 ```json
+// package.json
+
 {
   "name": "webpack-loyiha",
   "version": "1.0.0",
@@ -384,7 +384,7 @@ h1 {
 
 Ko'rinib turganidek `index.html` ga `style.css` fayli ulab qo'yildi.
 
-Loyihamizni `npm start` buyrug'i yoramida qayta ishlatamiz va browserda biz yozgan stillar ishlayotganini ko'ramiz.
+Loyihamizni `npm start` buyrug'i yoramida qayta ishlatamiz va browser'da biz yozgan stillar ishlayotganini ko'ramiz.
 
 Endi `style.css` faylini `index.html` faylidan olib, uni `index.js` fayliga import qilib qo'yamiz.
 
@@ -483,13 +483,11 @@ content.textContent = `Yil boshidan bugungacha ${days} kun o'tdi.`;
 
 Ko'rinib turganidek `h1` elementiga `mt-5` klasini qo'shdik.
 
-Loyihani `npm start` yordamida yana qayta ishlatamiz.
+Loyihani `npm start` yordamida yana qayta ishlatamiz va browser'da bootstrap ishlayotganini ko'ramiz.
 
-Endi bootstrap'ni browser'da ishlayotganini ko'rishimiz mumkin.
+### Cache Busting & Plugins
 
-### Cache Busting va Plugins
-
-Loyihamiz tezligini oshirish maqsadida unga cache qo'shamiz. Shunda har safar foydalanuvchi serverga so'rov jo'natganda birinchi browserdagi cache qaraladi. Agar so'ralayotgan narsa cache'da mavjud bo'lsa so'rovga javob cache'dan qaytariladi. Aks holda so'rov serverga jo'natiladi.
+Loyihamiz tezligini oshirish maqsadida unga cache qo'shamiz. Shunda har safar foydalanuvchi serverga so'rov jo'natganda birinchi browser'dagi cache qaraladi. Agar so'ralayotgan narsa cache'da mavjud bo'lsa so'rovga javob cache'dan qaytariladi. Aks holda so'rov serverga jo'natiladi.
 
 Buning uchun webpack konfiguratsiya faylini quyidagicha o'zgartiramiz.
 
@@ -574,9 +572,7 @@ Ya'ni qachonki loyihamizdagi biror javascript fayl o'zgarsa webpack qayta ishlam
 
 Har safar webpack har xil nomdagi javascript fayl yaratganligi uchun uni `index.html` ga hard code qilib ulab bo'lmaydi.
 
-Bu narsani automatik qilish uchun bizga [**Html Webpack Plugin**](https://webpack.js.org/plugins/html-webpack-plugin/) yordan beradi.
-
-Uni loyihamizga qo'shamiz.
+Bu narsani automatik bajarish uchun [**Html Webpack Plugin**](https://webpack.js.org/plugins/html-webpack-plugin/) dan foydalanamiz.
 
 ```console
 foo@bar:~/Desktop/webpack-loyiha$ npm install html-webpack-plugin --save-dev
@@ -652,7 +648,7 @@ Endi `npm start` orqali loyihani qayta ishlatganimizda `dist` papkasi ichida `ma
 
 Endi shu `index.html` ni browserda ochib qarasak hammasi yaxshi ishlayotganligini ko'ramiz.
 
-### Development va Production
+### Development & Production
 
 Development va production uchun loyihamizda `webpack.common.js`, `webpack.dev.js` va `webpack.prod.js` fayllarini yaratib olamiz va `webpack.config.js` faylini o'chiramiz.
 
@@ -676,7 +672,7 @@ foo@bar:~/Desktop/webpack-loyiha$ touch webpack.prod.js
 |- webpack.prod.js
 ```
 
-Endi bu fayllarga quyidagicha o'zgartirish qilamiz.
+Endi bu fayllarga quyidagi o'zgartirishlarni qilamiz.
 
 ```js
 // webpack.common.js
@@ -742,7 +738,7 @@ Endi `packge.json` faylimizni `scripts` bo'limini quyidagicha o'zgartiramiz.
 },
 ```
 
-Bu yerda `start` script'iga `webpack.dev.js`, `build` script'iga esa `webpack.prod.js` webpack konfiguratsiyasi fayllari ulab qo'yilyapti.
+Bu yerda `start` script'iga `webpack.dev.js`, `build` script'iga esa `webpack.prod.js` webpack konfiguratsiyasi fayllari ulab qo'yildi.
 
 Bundan tashqari `webpack.dev.js` va `webpack.prod.js` fayllarini `webpack.common.js` fayli bilan bog'lashda `merge` funksiyasi ishlatilyapti. Shu funksiyani loyihamizga qo'shish uchun quyidagi buyruqni yozamiz.
 
@@ -764,7 +760,7 @@ foo@bar:~/Desktop/webpack-loyiha$ npm run build
 
 ### Webpack DevServer
 
-Shu paytgacha loyihamizda o'zgarishlar bo'lganda `npm start` orqali uni qayta ishlatib keldik. Endi shu narsani bizga automatik qilib beruvchi [**webpack-dev-server**](https://webpack.js.org/configuration/dev-server/) ni loyihamizga o'rnatamiz.
+Shu paytgacha loyihamizda o'zgarishlar bo'lganda `npm start` orqali uni qayta ishlatib keldik. Endi shu narsani bizga automatik qilib beruvchi [**webpack-dev-server**](https://webpack.js.org/configuration/dev-server/) ni loyihamizga qo'shamiz.
 
 ```console
 foo@bar:~/Desktop/webpack-loyiha$ npm install webpack-dev-server --save-dev
@@ -789,7 +785,7 @@ foo@bar:~/Desktop/webpack-loyiha$ npm start
 
 Shu buyruqni terganimizda browser'da loyihamiz automatik tarzda ochiladi.
 
-Endi `index.js` fayliga o'zgartirish kiritganimizda loyiha qayta automatik ishga tushishini ko'ramiz.
+Endi `index.js` fayliga o'zgartirish `console.log('The end');` kiritganimizda loyiha yana qayta automatik ishga tushishini ko'ramiz.
 
 ```js
 // index.js
